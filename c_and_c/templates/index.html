@@ -11,5 +11,11 @@
     <h2>hello</h2>
     <p>woo hoo!</p>
     <p>yeah</p>
+    <a href="{{ url_for('register') }}" >Register</a>
+    {% for user in users %}
+    <p>
+      {{user.name}} : {{user.type}}
+    </p>
+    {% endfor %}
   </body>
 </html>
