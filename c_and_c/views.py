@@ -19,7 +19,7 @@ def register():
     else:
         new_user = User()
         new_user.name = request.form.get("name")
-        new_user.type = request.form.get("type")
+        new_user.type = int(request.form.get("type"))
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('users_list'))
