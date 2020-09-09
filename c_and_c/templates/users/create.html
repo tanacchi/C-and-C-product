@@ -18,7 +18,6 @@
       h1{
         text-align:center;
       }
-
     </style>
   </head>
   <body>
@@ -32,7 +31,12 @@
     <form action="" method="post">
       <table>
         <tr><th><input type="text" name="name" width="80" height="30"></th></tr>
-        <tr><td><input type="number" name="type" width="80" height="30"></td></tr>
+        <tr><td>
+          <select name="type">
+            <option value="1">学生</option>
+            <option value="2">企業</option>
+          </select>
+        </td></tr>
         <tr><td><input type="submit" value="登録"></td></tr>
       </table>
     </form>
