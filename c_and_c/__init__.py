@@ -4,6 +4,7 @@ from flask import Flask
 
 app = Flask(__name__)
 # app.secret_key = os.environ['SECRET_KEY']
+app.secret_key = 'SECRET_KEY'
 
 # Setup for Database
 from flask_sqlalchemy import SQLAlchemy
@@ -14,3 +15,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 import c_and_c.views
+import c_and_c.utils
