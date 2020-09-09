@@ -1,6 +1,10 @@
 from flask import render_template
 from c_and_c import app, db
 from c_and_c.models import User
+from utils import (
+    login, is_logged_in,
+    get_current_user, logout
+)
 from flask import (
     render_template, request,
     abort, redirect, url_for,

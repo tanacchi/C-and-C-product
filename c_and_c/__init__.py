@@ -14,3 +14,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 import c_and_c.views
+import c_and_c.utils
