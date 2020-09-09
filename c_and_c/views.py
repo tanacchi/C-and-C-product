@@ -15,6 +15,10 @@ from flask import (
 )
 
 
+NUMBER_USERTYPE_MAP = {
+    1: "学生", 2: "企業"
+}
+
 @app.route('/')
 def root():
     return render_template('index.html')
@@ -38,7 +42,8 @@ def register():
 @app.route('/users')
 def users_list():
     users = User.query.all()
-    return render_template('users/users.html', users=users)
+    name_usertype_list = [(user.name, NUMBER_USERTYPE_MAP[user.type]) for user in users]
+    return render_template('users/users.html', data=name_usertype_list)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -50,7 +55,6 @@ def login():
         user = User.query.filter_by(name=user_name).first()
         if user:
             session_login(user.id)
-            print(f"logged in as {user_name}")
         else:
             print("login failed.")
             return render_template('users/login.html')
@@ -69,9 +73,7 @@ def create_history():
         current_user.history.append(new_history)
         db.session.add(new_history)
         db.session.commit()
-        print("History created.")
 
-    # return redirect(url_for('root'))
     return redirect(url_for('user_history'))
 
 
@@ -91,12 +93,10 @@ def create_briefing():
         if request.method == 'GET':
             return render_template("briefing/create.html")
         else:
-            print("POST briefing")
             briefing = Briefing()
             briefing.description = request.form.get("description")
             db.session.add(briefing)
             db.session.commit()
-            briefings = Briefing.query.all()
             return redirect(url_for('list_briefing'))
 
     print("You are not admin")
@@ -123,7 +123,6 @@ def create_lecture():
         if request.method == 'GET':
             return render_template("lectures/create.html")
         else:
-            print("POST lecture")
             lecture = Lecture()
             lecture.description = request.form.get("description")
             db.session.add(lecture)
