@@ -88,11 +88,17 @@ def create_briefing():
         else:
             print("POST briefing")
             briefing = Briefing()
-            briefing.description = request.form.get("decription")
+            briefing.description = request.form.get("description")
             db.session.add(briefing)
             db.session.commit()
-            return render_template("briefing/list.html",
-                                   briefing=briefing)
+            briefings = Briefing.query.all()
+            return redirect(url_for('list_briefing'))
 
     print("You are not admin")
     return render_template("index.html")
+
+
+@app.route('/briefing')
+def list_briefing():
+    briefings = Briefing.query.all()
+    return render_template("briefing/list.html", briefings=briefings)
