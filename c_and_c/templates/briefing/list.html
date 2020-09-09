@@ -1,5 +1,6 @@
+<h1>合同説明会一覧</h1>
+<ul>
 {% for briefing in briefings %}
-<p>
-  {{briefing.id}} : {{briefing.description}}
-</p>
+  <li><a href="{{ url_for('briefing_detail', briefing_id=briefing.id)}}">合同説明会 {{briefing.id}}</li>
 {% endfor %}
+</ul>

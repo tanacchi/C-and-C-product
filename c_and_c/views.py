@@ -108,6 +108,12 @@ def list_briefing():
     return render_template("briefing/list.html", briefings=briefings)
 
 
+@app.route('/briefing/<int:briefing_id>')
+def briefing_detail(briefing_id):
+    briefing = Briefing.query.get(briefing_id)
+    return render_template("briefing/show.html", briefing=briefing)
+
+
 @app.route('/lectures/create', methods=['GET', 'POST'])
 def create_lecture():
     user_id = get_current_user()
