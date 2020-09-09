@@ -71,7 +71,8 @@ def create_history():
         db.session.commit()
         print("History created.")
 
-    return redirect(url_for('root'))
+    # return redirect(url_for('root'))
+    return redirect(url_for('user_history'))
 
 
 @app.route('/history')
