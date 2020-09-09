@@ -30,7 +30,9 @@ def register():
         new_user.type = int(request.form.get("type"))
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('users_list'))
+        user = User.query.filter_by(name=new_user.name).first()
+        session_login(user.id)
+        return redirect(url_for('root'))
 
 
 @app.route('/users')
@@ -51,6 +53,7 @@ def login():
             print(f"logged in as {user_name}")
         else:
             print("login failed.")
+            return render_template('users/login.html')
     return redirect(url_for('root'))
 
 
