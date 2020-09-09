@@ -1,5 +1,6 @@
 from flask import session
 
+
 login_key = 'user_id'
 
 def session_login(id):
@@ -8,7 +9,7 @@ def session_login(id):
 
 
 def is_logged_in():
-    return login_key in session
+    return bool(session.get(login_key))
 
 
 def get_current_user():
