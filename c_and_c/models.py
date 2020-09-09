@@ -13,5 +13,11 @@ class History(db.Model):
     body = db.Column(db.String(1000), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True)
 
+
+class Briefing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(1000), nullable=False)
+
+
 def init():
     db.create_all()

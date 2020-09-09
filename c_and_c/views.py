@@ -1,6 +1,8 @@
 from flask import render_template
 from c_and_c import app, db
-from c_and_c.models import User, History
+from c_and_c.models import (
+    User, History, Briefing
+)
 from c_and_c.utils import (
     session_login, is_logged_in,
     get_current_user, session_logout
@@ -10,6 +12,7 @@ from flask import (
     abort, redirect, url_for,
     flash
 )
+
 
 @app.route('/')
 def root():
@@ -73,3 +76,29 @@ def user_history():
     current_user = User.query.get(user_id)
     histories = current_user.history
     return render_template("history/list.html", histories=histories)
+
+
+@app.route('/briefing/create', methods=['GET', 'POST'])
+def create_briefing():
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    if current_user.name == "admin":
+        if request.method == 'GET':
+            return render_template("briefing/create.html")
+        else:
+            print("POST briefing")
+            briefing = Briefing()
+            briefing.description = request.form.get("description")
+            db.session.add(briefing)
+            db.session.commit()
+            briefings = Briefing.query.all()
+            return redirect(url_for('list_briefing'))
+
+    print("You are not admin")
+    return render_template("index.html")
+
+
+@app.route('/briefing')
+def list_briefing():
+    briefings = Briefing.query.all()
+    return render_template("briefing/list.html", briefings=briefings)
