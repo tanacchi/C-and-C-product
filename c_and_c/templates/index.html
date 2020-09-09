@@ -25,16 +25,17 @@
       <div class="menu">
         <ul>
           <li><a href="" >TOP</a></li>
-          <li><a href="" >チャットボット</a></li>
-          <li><a href="" >説明会</a></li>
-          <li><a href="" >オンライン講座</a></li>
+          <li><a href="https://kawakato2020-09-09.mybluemix.net/bot" >チャットボット</a></li>
+          <li><a href="{{ url_for('list_briefing') }}" >説明会</a></li>
+          <li><a href="{{ url_for('create_history') }}" >経歴の登録（学生用）</a></li>
+          <li><a href="{{ url_for('list_lectures') }}" >オンライン講座</a></li>
           <li><a href="" >About us</a></li>
           <li><a href="{{ url_for('register') }}" >新規登録</a></li>
-          <li><a href="" >ログイン</a></li>
+          <li><a href="{{ url_for('login') }}" >ログイン</a></li>
         </ul>
       </div>
     </header>
-    <p>なりたい自分に出会える就活支援アプリ（決まり文句を入れたい）</p>
+    <p>なりたい自分に出会える就活支援アプリ</p>
     <h1>S&E</h1>
     <br>
     <br>

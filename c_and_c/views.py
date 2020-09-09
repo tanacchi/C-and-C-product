@@ -30,7 +30,9 @@ def register():
         new_user.type = int(request.form.get("type"))
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('users_list'))
+        user = User.query.filter_by(name=new_user.name).first()
+        session_login(user.id)
+        return redirect(url_for('root'))
 
 
 @app.route('/users')
@@ -51,6 +53,7 @@ def login():
             print(f"logged in as {user_name}")
         else:
             print("login failed.")
+            return render_template('users/login.html')
     return redirect(url_for('root'))
 
 
@@ -68,7 +71,8 @@ def create_history():
         db.session.commit()
         print("History created.")
 
-    return redirect(url_for('root'))
+    # return redirect(url_for('root'))
+    return redirect(url_for('user_history'))
 
 
 @app.route('/history')
@@ -103,6 +107,12 @@ def create_briefing():
 def list_briefing():
     briefings = Briefing.query.all()
     return render_template("briefing/list.html", briefings=briefings)
+
+
+@app.route('/briefing/<int:briefing_id>')
+def briefing_detail(briefing_id):
+    briefing = Briefing.query.get(briefing_id)
+    return render_template("briefing/show.html", briefing=briefing)
 
 
 @app.route('/lectures/create', methods=['GET', 'POST'])
