@@ -19,5 +19,10 @@ class Briefing(db.Model):
     description = db.Column(db.String(1000), nullable=False)
 
 
+class Lecture(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(1000), nullable=False)
+
+
 def init():
     db.create_all()
