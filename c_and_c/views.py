@@ -9,8 +9,8 @@ from flask import (
 
 @app.route('/')
 def root():
-    users = User.query.all()
-    return render_template('index.html', users=users)
+    return render_template('index.html')
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
@@ -22,4 +22,10 @@ def register():
         new_user.type = request.form.get("type")
         db.session.add(new_user)
         db.session.commit()
-        return render_template('index.html')
+        return redirect(url_for('users_list'))
+
+
+@app.route('/users')
+def users_list():
+    users = User.query.all()
+    return render_template('users/users.html', users=users)
