@@ -2,7 +2,7 @@ from flask import session
 
 login_key = 'user_id'
 
-def login(id):
+def session_login(id):
     session[login_key] = id
 
 

@@ -1,8 +1,8 @@
 from flask import render_template
 from c_and_c import app, db
 from c_and_c.models import User
-from utils import (
-    login, is_logged_in,
+from c_and_c.utils import (
+    session_login, is_logged_in,
     get_current_user, logout
 )
 from flask import (
@@ -33,3 +33,18 @@ def register():
 def users_list():
     users = User.query.all()
     return render_template('users/users.html', users=users)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('users/login.html')
+    else:
+        user_name = request.form.get("name")
+        user = User.query.filter_by(name=user_name).first()
+        if user:
+            session_login(user.id)
+            print(f"logged in as {user_name}")
+        else:
+            print("login failed.")
+    return redirect(url_for('root'))
