@@ -11,7 +11,7 @@ class User(db.Model):
 class History(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(1000), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user_status.id'), unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True)
 
 def init():
     db.create_all()

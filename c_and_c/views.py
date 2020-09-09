@@ -1,6 +1,6 @@
 from flask import render_template
 from c_and_c import app, db
-from c_and_c.models import User
+from c_and_c.models import User, History
 from c_and_c.utils import (
     session_login, is_logged_in,
     get_current_user, session_logout
@@ -52,5 +52,16 @@ def login():
 
 @app.route('/history/create', methods=['GET', 'POST'])
 def create_history():
-    print(f"{request.method}")
+    if request.method == 'GET':
+        return render_template('history/create.html')
+    else:
+        user_id = get_current_user()
+        current_user = User.query.get(user_id)
+        new_history = History()
+        new_history.body = request.form.get("body")
+        current_user.history.append(new_history)
+        db.session.add(new_history)
+        db.session.commit()
+        print("History created.")
+
     return redirect(url_for('root'))
