@@ -65,3 +65,11 @@ def create_history():
         print("History created.")
 
     return redirect(url_for('root'))
+
+
+@app.route('/history')
+def user_history():
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    histories = current_user.history
+    return render_template("history/list.html", histories=histories)
