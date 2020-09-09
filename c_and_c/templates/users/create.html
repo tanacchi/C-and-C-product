@@ -1,7 +1,43 @@
-<h1>SignUp</h1>
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title> 登録フォーム </title>
+    <style>
+      body{
+        background-color: rgb(195, 218, 218);
+      }
 
-<form action="" method="post">
-  <input type="text" name="name" width="80" height="30">
-  <input type="number" name="type" width="80" height="30">
-  <input type="submit" value="登録">
-</form>
+
+      table{
+        text-align:center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      h1{
+        text-align:center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="{{url-for('root')}}">TOP</a>
+    </header>
+
+    <h1>SignUp</h1>
+
+    <form action="" method="post">
+      <table>
+        <tr><th><input type="text" name="name" width="80" height="30"></th></tr>
+        <tr><td>
+          <select name="type">
+            <option value="1">学生</option>
+            <option value="2">企業</option>
+          </select>
+        </td></tr>
+        <tr><td><input type="submit" value="登録"></td></tr>
+      </table>
+    </form>
+  </body>
+</html>
