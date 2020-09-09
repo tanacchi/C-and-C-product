@@ -15,6 +15,10 @@ from flask import (
 )
 
 
+NUMBER_USERTYPE_MAP = {
+    1: "学生", 2: "企業"
+}
+
 @app.route('/')
 def root():
     return render_template('index.html')
@@ -38,7 +42,8 @@ def register():
 @app.route('/users')
 def users_list():
     users = User.query.all()
-    return render_template('users/users.html', users=users)
+    name_usertype_list = [(user.name, NUMBER_USERTYPE_MAP[user.type]) for user in users]
+    return render_template('users/users.html', data=name_usertype_list)
 
 
 @app.route('/login', methods=['GET', 'POST'])
