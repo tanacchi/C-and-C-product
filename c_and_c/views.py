@@ -1,7 +1,8 @@
 from flask import render_template
 from c_and_c import app, db
 from c_and_c.models import (
-    User, History, Briefing
+    User, History, Briefing,
+    Lecture
 )
 from c_and_c.utils import (
     session_login, is_logged_in,
@@ -95,10 +96,36 @@ def create_briefing():
             return redirect(url_for('list_briefing'))
 
     print("You are not admin")
-    return render_template("index.html")
+    return redirect(url_for('root'))
 
 
 @app.route('/briefing')
 def list_briefing():
     briefings = Briefing.query.all()
     return render_template("briefing/list.html", briefings=briefings)
+
+
+@app.route('/lectures/create', methods=['GET', 'POST'])
+def create_lecture():
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    if current_user.name == "admin":
+        if request.method == 'GET':
+            return render_template("lectures/create.html")
+        else:
+            print("POST lecture")
+            lecture = Lecture()
+            lecture.description = request.form.get("description")
+            db.session.add(lecture)
+            db.session.commit()
+            lectures = Lecture.query.all()
+            return redirect(url_for('list_lectures'))
+
+    print("You are not admin")
+    return redirect(url_for('root'))
+
+
+@app.route('/lectures')
+def list_lectures():
+    lectures = Lecture.query.all()
+    return render_template("lectures/list.html", lectures=lectures)
