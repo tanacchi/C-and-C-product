@@ -3,7 +3,7 @@ from c_and_c import app, db
 from c_and_c.models import User
 from c_and_c.utils import (
     session_login, is_logged_in,
-    get_current_user, logout
+    get_current_user, session_logout
 )
 from flask import (
     render_template, request,
@@ -47,4 +47,10 @@ def login():
             print(f"logged in as {user_name}")
         else:
             print("login failed.")
+    return redirect(url_for('root'))
+
+
+@app.route('/history/create', methods=['GET', 'POST'])
+def create_history():
+    print(f"{request.method}")
     return redirect(url_for('root'))

@@ -14,5 +14,5 @@ def get_current_user():
     return session.get(login_key)
 
 
-def logout():
+def session_logout():
     session[login_key] = None
