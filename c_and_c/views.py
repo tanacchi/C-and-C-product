@@ -205,7 +205,8 @@ def enter_top():
 def student_detail(user_id):
     company_id = get_current_user()
     student = User.query.get(user_id)
-    access_count = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company_id).access_count
+    relation = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company_id).first()
+    access_count = relation.access_count if relation else 0
     return render_template("users/details.html", student=student, access_count=access_count)
 
 
