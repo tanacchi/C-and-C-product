@@ -138,3 +138,4 @@ def create_lecture():
 def list_lectures():
     lectures = Lecture.query.all()
     return render_template("lectures/list.html", lectures=lectures)
+
