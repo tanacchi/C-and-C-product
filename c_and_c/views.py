@@ -200,6 +200,12 @@ def about_us():
 def enter_top():
     return render_template("users/enter_top.html")
 
+@app.route('/company')
+def company_list():
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    companies = User.query.filter_by(type=COMPANY)
+    return render_template("users/companies.html", companies=companies)
 
 @app.route('/enterdetails/<int:user_id>')
 def student_detail(user_id):
