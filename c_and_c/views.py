@@ -97,6 +97,13 @@ def create_briefing():
         else:
             briefing = Briefing()
             briefing.description = request.form.get("description")
+            participants = request.form.get("participants")
+            for attr, value in request.form.items():
+                if 'participants' in attr:
+                    company_id = attr.split('_')[1]
+                    print(company_id, value)
+                    company = User.query.get(company_id)
+                    briefing.participants.append(company)
             db.session.add(briefing)
             db.session.commit()
             return redirect(url_for('list_briefing'))

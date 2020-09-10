@@ -4,7 +4,7 @@
   <input type="text" name="description" width="80" height="30">
   <p>参加企業</p>
   {% for company in companies %}
-  <input type="checkbox" name="participants" value="{{company.id}}">{{company.name}}
+  <input type="checkbox" name="participants_{{company.id}}" value="1">{{company.name}}
   {% endfor %}
   <input type="submit" value="登録">
 </form>
