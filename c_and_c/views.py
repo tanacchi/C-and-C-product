@@ -3,6 +3,7 @@ from c_and_c import app, db
 from c_and_c.models import (
     User, History, Briefing,
     Lecture, UserCompanyTable,
+    FavoriteTable
 )
 from c_and_c.utils import (
     session_login, is_logged_in,
@@ -33,7 +34,7 @@ def root():
         return render_template('index.html', is_logged_in=True)
     else:
         students = User.query.filter_by(type=STUDENT)
-        return render_template("users/enter_top.html", students=students)
+        return render_template("users/enter_top.html", students=students, company=current_user)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -198,14 +199,23 @@ def about_us():
 
 @app.route('/entertop')
 def enter_top():
-    return render_template("users/enter_top.html")
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    return render_template("users/enter_top.html", company=current_user)
+
 
 @app.route('/company')
 def company_list():
     user_id = get_current_user()
     current_user = User.query.get(user_id)
     companies = User.query.filter_by(type=COMPANY)
-    return render_template("users/companies.html", companies=companies)
+    company_data = {}
+    for company in companies:
+        favo = FavoriteTable.query.filter_by(student_id=user_id, company_id=company.id).first()
+        favorited = True if favo else False
+        company_data[company.id] = (company.name, favorited)
+    return render_template("users/companies.html", company_data=company_data, student_id=user_id)
+
 
 @app.route('/enterdetails/<int:user_id>')
 def student_detail(user_id):
@@ -234,3 +244,20 @@ def list_students():
             access_counts[company_name] = relation.access_count if relation else 0
         students_data[student.id] = (student.name, access_counts)
     return render_template("users/students.html", students_data=students_data)
+
+
+@app.route('/favorite')
+def favorite():
+    student_id = int(request.args.get("student_id"))
+    company_id = int(request.args.get("company_id"))
+    print("favo: ", student_id, company_id)
+    favo = FavoriteTable.query.filter_by(student_id=student_id, company_id=company_id).first()
+    if favo:
+        db.session.delete(favo)
+    else:
+        favo = FavoriteTable()
+        favo.student_id = student_id
+        favo.company_id = company_id
+        db.session.add(favo)
+    db.session.commit()
+    return redirect(url_for("company_list"))
