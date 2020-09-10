@@ -186,8 +186,21 @@ def enter_top():
 
 @app.route('/company')
 def company_list():
-    return render_template("/users/companies.html")
-
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    if not current_user.type == STUDENT:
+        print("You are not student.")
+        return redirect(url_for('root'))
+    students = { student.id: student.name for student in User.query.filter_by(type=STUDENT)}
+    print(students)
+    companies = User.query.filter_by(type=COMPANY)
+    for company in companies:
+        access_counts = {}
+        for company_id, company_name in companies.items():
+            relation = UserCompanyTable.query.filter_by(student_id=student.id, company_id=company_id).first()
+            access_counts[company_name] = relation.access_count if relation else 0
+        students_data[student.id] = (student.name, access_counts)
+    return render_template("users/companies.html")
 
 @app.route('/students')
 def list_students():
