@@ -17,7 +17,13 @@
         display: inline;
         margin-right: 25px;
       }
-
+      .howToUseThis{
+        margin-top: 100px;
+        margin-bottom: 100px;
+      }
+      small{
+        padding-bottom: 100px;
+      }
     </style>
   </head>
   <body>
@@ -30,8 +36,17 @@
           <li><a href="{{ url_for('create_history') }}" >経歴の登録（学生用）</a></li>
           <li><a href="{{ url_for('list_lectures') }}" >オンライン講座</a></li>
           <li><a href="{{ url_for('about_us') }}" >About us</a></li>
+
           <li><a href="{{ url_for('register') }}" >新規登録</a></li>
           <li><a href="{{ url_for('login') }}" >ログイン</a></li>
+        </ul>
+        <ul>
+          <li><a href="{{ url_for('create_history') }}" >経歴の登録（学生用）</a></li>
+          <li><a href="https://kawakato2020-09-09.mybluemix.net/bot" >チャットボット</a></li>
+          <li><a href="{{ url_for('list_briefing') }}" >説明会</a></li>
+          <li><a href="{{ url_for('list_lectures') }}" >オンライン講座</a></li>
+          <li><a href="{{ url_for('create_history') }}" >経歴の再登録（学生用）</a></li>
+
         </ul>
       </div>
     </header>
@@ -42,9 +57,19 @@
     <h2>S&Eとは？</h2>
     <p>StudentとEnterpriseの出会いを提供します</p>
     <p>チャットボット、合同説明会、オンライン講座などのコンテンツを提供</p>
-
     <br>
     <h2>企業紹介</h2>
+    <div class="howToUseThis">
+      <h2>このサイトの使い方</h2>
+      <h3>フレーズ１：<a href="{{ url_for('create_history') }}" >経歴の登録（学生用）</a></h3>
+      <p>ESを提出しよう！あとで上書きすることもできるよ！</p>
+      <h3>フレーズ２：　　<a href="https://kawakato2020-09-09.mybluemix.net/bot" >チャットボット</a>　　</h3>
+      <p>チャットボットと話してみよう！説明会やオンライン講座でスキルアップできるかも</p>
+      <h3>フレーズ３：<a href="{{ url_for('list_briefing') }}" >説明会</a>　<a href="{{ url_for('list_lectures') }}" >オンライン講座</a></h3>
+      <p>説明会やオンライン講座を受講して、企業にアピールしよう！</p>
+      <h3>フレーズ４：<a href="{{ url_for('create_history') }}" >経歴の再登録（学生用）</a></h3>
+      <p>フレーズ１で入力した内容を変更できるよ！自分の成長を実感しよう！</p>
+    </div>
 
     <footer>
       <div class="menu">
@@ -54,7 +79,6 @@
           <li><a href="" >関連情報</a></li>
         </ul>
       </div>
-
       <small>©2020 C&C inc.</small>
     </footer>
   </body>
