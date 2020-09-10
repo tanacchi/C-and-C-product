@@ -25,13 +25,17 @@
       <div class="menu">
         <ul>
           <li><a href="" >TOP</a></li>
-          <li><a href="https://kawakato2020-09-09.mybluemix.net/bot" >チャットボット</a></li>
-          <li><a href="{{ url_for('list_briefing') }}" >説明会</a></li>
-          <li><a href="{{ url_for('create_history') }}" >経歴の登録（学生用）</a></li>
-          <li><a href="{{ url_for('list_lectures') }}" >オンライン講座</a></li>
           <li><a href="" >About us</a></li>
           <li><a href="{{ url_for('register') }}" >新規登録</a></li>
           <li><a href="{{ url_for('login') }}" >ログイン</a></li>
+        </ul>
+        <ul>
+          <li><a href="{{ url_for('create_history') }}" >経歴の登録（学生用）</a></li>
+          <li><a href="https://kawakato2020-09-09.mybluemix.net/bot" >チャットボット</a></li>
+          <li><a href="{{ url_for('list_briefing') }}" >説明会</a></li>
+          <li><a href="{{ url_for('list_lectures') }}" >オンライン講座</a></li>
+          <li><a href="{{ url_for('create_history') }}" >経歴の再登録（学生用）</a></li>
+
         </ul>
       </div>
     </header>
@@ -42,9 +46,17 @@
     <h2>S&Eとは？</h2>
     <p>StudentとEnterpriseの出会いを提供します</p>
     <p>チャットボット、合同説明会、オンライン講座などのコンテンツを提供</p>
-
     <br>
     <h2>企業紹介</h2>
+    <h2>このサイトの使い方</h2>
+    <a href="{{ url_for('create_history') }}" >経歴の登録（学生用）</a>
+    <a href="https://kawakato2020-09-09.mybluemix.net/bot" >チャットボット</a>
+    <a href="{{ url_for('list_briefing') }}" >説明会</a>
+    <a href="{{ url_for('list_lectures') }}" >オンライン講座</a>
+    <a href="{{ url_for('create_history') }}" >経歴の再登録（学生用）</a>
+
+
+
 
     <footer>
       <div class="menu">
