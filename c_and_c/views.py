@@ -203,10 +203,8 @@ def enter_top():
 
 @app.route('/enterdetails/<int:user_id>')
 def student_detail(user_id):
-    user_id = get_current_user()
-    current_user = User.query.get(user_id)
-    histories = current_user.history
-    return render_template("users/details.html",histories=histories)
+    student = User.query.get(user_id)
+    return render_template("users/details.html", student=student)
 
 
 @app.route('/students')
