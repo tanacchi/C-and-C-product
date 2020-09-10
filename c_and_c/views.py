@@ -22,7 +22,7 @@ NUMBER_USERTYPE_MAP = {
 
 @app.route('/')
 def root():
-    return render_template('index.html')
+    return render_template('index.html', is_logged_in=is_logged_in())
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -63,6 +63,12 @@ def login():
         else:
             print("login failed.")
             return render_template('users/login.html')
+
+
+@app.route('/logout')
+def logout():
+    session_logout()
+    return redirect(url_for('root'))
 
 
 @app.route('/history/create', methods=['GET', 'POST'])
