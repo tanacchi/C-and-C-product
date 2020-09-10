@@ -2,5 +2,9 @@
 
 <form action="{{url_for('create_briefing')}}" method="post">
   <input type="text" name="description" width="80" height="30">
+  <p>参加企業</p>
+  {% for company in companies %}
+  <input type="checkbox" name="participants" value="{{company.id}}">{{company.name}}
+  {% endfor %}
   <input type="submit" value="登録">
 </form>

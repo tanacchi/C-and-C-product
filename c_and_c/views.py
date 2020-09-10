@@ -14,9 +14,10 @@ from flask import (
     flash
 )
 
-
+STUDENT = 1
+COMPANY = 2
 NUMBER_USERTYPE_MAP = {
-    1: "学生", 2: "企業"
+    STUDENT: "学生", COMPANY: "企業"
 }
 
 @app.route('/')
@@ -91,7 +92,8 @@ def create_briefing():
     current_user = User.query.get(user_id)
     if current_user.name == "admin":
         if request.method == 'GET':
-            return render_template("briefing/create.html")
+            companies = User.query.filter_by(type=COMPANY)
+            return render_template("briefing/create.html", companies=companies)
         else:
             briefing = Briefing()
             briefing.description = request.form.get("description")
