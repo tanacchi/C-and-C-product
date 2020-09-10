@@ -13,7 +13,11 @@
 <h1>{{student.name}}さんの情報</h1>
 
 <p class="count">合同説明会・オンライン講座視聴 合計回数: {{access_count}}回</p>
-
+{% if favorited %}
+<p><b>お気に入り登録されています</b></p>
+{% else %}
+<p>お気に入り登録されていません</p>
+{% endif %}
 
 <h2>経歴</h2>
 {% for history in student.history %}

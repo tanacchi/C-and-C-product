@@ -223,7 +223,9 @@ def student_detail(user_id):
     student = User.query.get(user_id)
     relation = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company_id).first()
     access_count = relation.access_count if relation else 0
-    return render_template("users/details.html", student=student, access_count=access_count)
+    favo = FavoriteTable.query.filter_by(student_id=student.id, company_id=company_id).first()
+    favorited = True if favo else False
+    return render_template("users/details.html", student=student, access_count=access_count, favorited=favorited)
 
 
 @app.route('/students')
