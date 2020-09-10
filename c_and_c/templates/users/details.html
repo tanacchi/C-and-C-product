@@ -1,7 +1,26 @@
+<style>
+    .count{
+        padding-left: 60%;
+    }
+    
+
+</style>
+
+<body>
+<h1>〇〇さんの情報</h1>
+
+<p class="count">オンライン講座視聴回数:</p>
+
+<p class="count">合同説明会参加回数:</p>
+
+<h2>経歴</h2>
 {% for history in histories %}
 <p>
   {{history.user_id}} : {{history.body}}
 </p>
 {% endfor %}
 
-<p>wa-i</p>
+
+<h2>解析結果</h2>
+
+</body>
