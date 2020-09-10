@@ -32,7 +32,8 @@ def root():
     if current_user.type == STUDENT:
         return render_template('index.html', is_logged_in=True)
     else:
-        return render_template("users/enter_top.html")
+        students = User.query.filter_by(type=STUDENT)
+        return render_template("users/enter_top.html", students=students)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
