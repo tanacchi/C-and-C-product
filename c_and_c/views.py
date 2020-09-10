@@ -139,3 +139,6 @@ def list_lectures():
     lectures = Lecture.query.all()
     return render_template("lectures/list.html", lectures=lectures)
 
+@app.route('/about')
+def about_us():
+    return render_template("about/aboutus.html")
