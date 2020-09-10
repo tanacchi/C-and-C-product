@@ -32,7 +32,8 @@ def root():
     if current_user.type == STUDENT:
         return render_template('index.html', is_logged_in=True)
     else:
-        return render_template("users/enter_top.html")
+        students = User.query.filter_by(type=STUDENT)
+        return render_template("users/enter_top.html", students=students)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -202,10 +203,11 @@ def enter_top():
 
 @app.route('/enterdetails/<int:user_id>')
 def student_detail(user_id):
-    user_id = get_current_user()
-    current_user = User.query.get(user_id)
-    histories = current_user.history
-    return render_template("users/details.html",histories=histories)
+    company_id = get_current_user()
+    student = User.query.get(user_id)
+    relation = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company_id).first()
+    access_count = relation.access_count if relation else 0
+    return render_template("users/details.html", student=student, access_count=access_count)
 
 
 @app.route('/students')

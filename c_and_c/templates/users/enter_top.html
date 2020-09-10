@@ -27,11 +27,12 @@
         <tr>
             <th>学生一覧</th>
         </tr>
+        {% for student in students %}
         <tr>
-            <!-- for文で回す感じですかね？ -->
-            <td>たかし(username)</td>
-            <td><a href="" >詳細(userinfo)</a></td>
+            <td>{{student.name}}</td>
+            <td><a href="{{url_for('student_detail', user_id=student.id)}}" >詳細</a></td>
         </tr>
+        {% endfor %}
       </table>
 
 </body>
