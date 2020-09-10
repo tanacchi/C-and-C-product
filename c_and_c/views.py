@@ -19,6 +19,9 @@ COMPANY = 2
 NUMBER_USERTYPE_MAP = {
     STUDENT: "学生", COMPANY: "企業"
 }
+STUDENT_TOPICS = [
+    "ハッカソン", "競技プログラミング",
+]
 
 @app.route('/')
 def root():
@@ -87,7 +90,15 @@ def create_history():
         current_user.history.append(new_history)
         db.session.add(new_history)
         db.session.commit()
-
+        histories = History.query.filter_by(user_id=user_id)
+        topic_str = ""
+        for history in histories:
+            for topic in STUDENT_TOPICS:
+                if topic in history.body:
+                    topic_str += topic + ", "
+        current_user.topic = topic_str
+        db.session.add(current_user)
+        db.session.commit()
     return redirect(url_for('user_history'))
 
 
