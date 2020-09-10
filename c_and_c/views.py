@@ -162,6 +162,11 @@ def list_lectures():
     return render_template("lectures/list.html", lectures=lectures)
 
 
+@app.route('/about')
+def about_us():
+    return render_template("aboutus.html")
+
+
 @app.route('/entertop')
 def enter_top():
     return render_template("users/enter_top.html")
