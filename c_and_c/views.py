@@ -130,6 +130,8 @@ def briefing_detail(briefing_id):
                 relation.access_count += 1
             else:
                 relation = UserCompanyTable()
+                relation.student_id = user_id
+                relation.company_id = company.id
                 relation.access_count = 1
             db.session.add(relation)
             db.session.commit()
@@ -148,7 +150,6 @@ def create_lecture():
             lecture.description = request.form.get("description")
             db.session.add(lecture)
             db.session.commit()
-            lectures = Lecture.query.all()
             return redirect(url_for('list_lectures'))
 
     print("You are not admin")
@@ -159,3 +160,23 @@ def create_lecture():
 def list_lectures():
     lectures = Lecture.query.all()
     return render_template("lectures/list.html", lectures=lectures)
+
+
+@app.route('/students')
+def list_students():
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    if not current_user.type == COMPANY:
+        print("You are not company.")
+        return redirect(url_for('root'))
+    companies = { company.id: company.name for company in User.query.filter_by(type=COMPANY)}
+    print(companies)
+    students = User.query.filter_by(type=STUDENT)
+    students_data = {}
+    for student in students:
+        access_counts = {}
+        for company_id, company_name in companies.items():
+            relation = UserCompanyTable.query.filter_by(student_id=student.id, company_id=company_id).first()
+            access_counts[company_name] = relation.access_count if relation else 0
+        students_data[student.id] = (student.name, access_counts)
+    return render_template("users/students.html", students_data=students_data)
