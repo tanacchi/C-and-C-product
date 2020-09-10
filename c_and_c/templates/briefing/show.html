@@ -1,3 +1,6 @@
 <h1>合同説明会の詳細</h1>
 <h2>合同説明会 {{briefing.id}}</h2>
 <p>{{briefing.description}}</p>
+{% for company in briefing.participants %}
+<p>{{company.name}}</p>
+{% endfor %}
