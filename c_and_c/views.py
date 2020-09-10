@@ -56,10 +56,13 @@ def login():
         user = User.query.filter_by(name=user_name).first()
         if user:
             session_login(user.id)
+            if user.type == STUDENT:
+                return redirect(url_for('root'))
+            else:
+                return redirect(url_for('enter_top'))
         else:
             print("login failed.")
             return render_template('users/login.html')
-    return redirect(url_for('root'))
 
 
 @app.route('/history/create', methods=['GET', 'POST'])
@@ -171,7 +174,7 @@ def about_us():
 def enter_top():
     return render_template("users/enter_top.html")
 
-  
+
 @app.route('/students')
 def list_students():
     user_id = get_current_user()
