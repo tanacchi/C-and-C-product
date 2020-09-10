@@ -91,11 +91,15 @@ def create_history():
         db.session.add(new_history)
         db.session.commit()
         histories = History.query.filter_by(user_id=user_id)
-        topic_str = ""
+        student_topics = []
         for history in histories:
             for topic in STUDENT_TOPICS:
                 if topic in history.body:
-                    topic_str += topic + ", "
+                    student_topics.append(topic)
+        student_topics = list(set(student_topics))
+        topic_str = ""
+        for topic in student_topics:
+            topic_str += topic + ", "
         current_user.topic = topic_str
         db.session.add(current_user)
         db.session.commit()
