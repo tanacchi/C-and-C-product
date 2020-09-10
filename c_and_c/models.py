@@ -18,6 +18,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
     type = db.Column(db.Integer, nullable=False)
+    topic = db.Column(db.String(1000), nullable=True, unique=False)
     history = db.relationship('History', backref='user', lazy=True)
 
 
