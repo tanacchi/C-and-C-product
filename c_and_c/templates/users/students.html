@@ -1,8 +1,0 @@
-{% for student_id, data in students_data.items() %}
-<p>
-name: {{ data[0]}}
-{% for company_name, count in data[1].items() %}
-  {{company_name}} : {{count}}
-{% endfor %}
-</p>
-{% endfor %}
