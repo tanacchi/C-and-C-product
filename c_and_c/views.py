@@ -184,6 +184,10 @@ def about_us():
 def enter_top():
     return render_template("users/enter_top.html")
 
+@app.route('/company')
+def company_list():
+    return render_template("/users/companies.html")
+
 
 @app.route('/students')
 def list_students():
