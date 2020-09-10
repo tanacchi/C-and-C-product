@@ -7,6 +7,10 @@ body{
 <body>
 <h1>企業一覧</h1>
 
-{% for company in companies %}
-{{company.name}}:<a href="{{ url_for('root')}}">お気に入りする</a>
+{% for company_id, data in company_data.items() %}
+{% if data[1]%}
+{{data[0]}}:<a href="{{ url_for('favorite')}}?student_id={{student_id}}&company_id={{company_id}}">お気に入りを外す</a>
+{% else %}
+{{data[0]}}:<a href="{{ url_for('favorite')}}?student_id={{student_id}}&company_id={{company_id}}">お気に入りする</a>
+{% endif %}
 {% endfor %}
