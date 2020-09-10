@@ -138,3 +138,7 @@ def create_lecture():
 def list_lectures():
     lectures = Lecture.query.all()
     return render_template("lectures/list.html", lectures=lectures)
+
+@app.route('/entertop')
+def enter_top():
+    return render_template("users/enter_top.html")
