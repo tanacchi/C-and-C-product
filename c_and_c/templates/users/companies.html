@@ -7,9 +7,6 @@ body{
 <body>
 <h1>企業一覧</h1>
 
-<table>
-    
-
-</body>
-
-
+{% for company in companies %}
+{{company.name}}:<a href="{{ url_for('root')}}">お気に入りする</a>
+{% endfor %}
