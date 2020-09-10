@@ -2,7 +2,7 @@ from flask import render_template
 from c_and_c import app, db
 from c_and_c.models import (
     User, History, Briefing,
-    Lecture
+    Lecture, UserCompanyTable,
 )
 from c_and_c.utils import (
     session_login, is_logged_in,
@@ -120,7 +120,19 @@ def list_briefing():
 
 @app.route('/briefing/<int:briefing_id>')
 def briefing_detail(briefing_id):
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
     briefing = Briefing.query.get(briefing_id)
+    if current_user.type == STUDENT:
+        for company in briefing.participants:
+            relation = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company.id).first()
+            if relation:
+                relation.access_count += 1
+            else:
+                relation = UserCompanyTable()
+                relation.access_count = 1
+            db.session.add(relation)
+            db.session.commit()
     return render_template("briefing/show.html", briefing=briefing)
 
 
