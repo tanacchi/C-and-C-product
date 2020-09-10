@@ -190,3 +190,5 @@ def list_students():
             access_counts[company_name] = relation.access_count if relation else 0
         students_data[student.id] = (student.name, access_counts)
     return render_template("users/students.html", students_data=students_data)
+
+@app.route('')
