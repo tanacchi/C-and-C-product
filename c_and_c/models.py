@@ -7,6 +7,12 @@ company_briefing_table = db.Table('company_briefing_table',
 )
 
 
+class FavoriteTable(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=False)
+
+
 class UserCompanyTable(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=False)
@@ -18,6 +24,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
     type = db.Column(db.Integer, nullable=False)
+    topic = db.Column(db.String(1000), nullable=True, unique=False)
     history = db.relationship('History', backref='user', lazy=True)
 
 

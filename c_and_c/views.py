@@ -3,6 +3,7 @@ from c_and_c import app, db
 from c_and_c.models import (
     User, History, Briefing,
     Lecture, UserCompanyTable,
+    FavoriteTable
 )
 from c_and_c.utils import (
     session_login, is_logged_in,
@@ -19,10 +20,21 @@ COMPANY = 2
 NUMBER_USERTYPE_MAP = {
     STUDENT: "学生", COMPANY: "企業"
 }
+STUDENT_TOPICS = [
+    "ハッカソン", "競技プログラミング",
+]
 
 @app.route('/')
 def root():
-    return render_template('index.html')
+    user_id = get_current_user()
+    if not user_id:
+        return render_template('index.html', is_logged_in=False)
+    current_user = User.query.get(user_id)
+    if current_user.type == STUDENT:
+        return render_template('index.html', is_logged_in=True)
+    else:
+        students = User.query.filter_by(type=STUDENT)
+        return render_template("users/enter_top.html", students=students, company=current_user)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -56,9 +68,15 @@ def login():
         user = User.query.filter_by(name=user_name).first()
         if user:
             session_login(user.id)
+            return redirect(url_for('root'))
         else:
             print("login failed.")
             return render_template('users/login.html')
+
+
+@app.route('/logout')
+def logout():
+    session_logout()
     return redirect(url_for('root'))
 
 
@@ -74,7 +92,19 @@ def create_history():
         current_user.history.append(new_history)
         db.session.add(new_history)
         db.session.commit()
-
+        histories = History.query.filter_by(user_id=user_id)
+        student_topics = []
+        for history in histories:
+            for topic in STUDENT_TOPICS:
+                if topic in history.body:
+                    student_topics.append(topic)
+        student_topics = list(set(student_topics))
+        topic_str = ""
+        for topic in student_topics:
+            topic_str += topic + ", "
+        current_user.topic = topic_str
+        db.session.add(current_user)
+        db.session.commit()
     return redirect(url_for('user_history'))
 
 
@@ -169,9 +199,33 @@ def about_us():
 
 @app.route('/entertop')
 def enter_top():
-    return render_template("users/enter_top.html")
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    return render_template("users/enter_top.html", company=current_user)
 
-  
+
+@app.route('/company')
+def company_list():
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    companies = User.query.filter_by(type=COMPANY)
+    company_data = {}
+    for company in companies:
+        favo = FavoriteTable.query.filter_by(student_id=user_id, company_id=company.id).first()
+        favorited = True if favo else False
+        company_data[company.id] = (company.name, favorited)
+    return render_template("users/companies.html", company_data=company_data, student_id=user_id)
+
+
+@app.route('/enterdetails/<int:user_id>')
+def student_detail(user_id):
+    company_id = get_current_user()
+    student = User.query.get(user_id)
+    relation = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company_id).first()
+    access_count = relation.access_count if relation else 0
+    return render_template("users/details.html", student=student, access_count=access_count)
+
+
 @app.route('/students')
 def list_students():
     user_id = get_current_user()
@@ -190,3 +244,20 @@ def list_students():
             access_counts[company_name] = relation.access_count if relation else 0
         students_data[student.id] = (student.name, access_counts)
     return render_template("users/students.html", students_data=students_data)
+
+
+@app.route('/favorite')
+def favorite():
+    student_id = int(request.args.get("student_id"))
+    company_id = int(request.args.get("company_id"))
+    print("favo: ", student_id, company_id)
+    favo = FavoriteTable.query.filter_by(student_id=student_id, company_id=company_id).first()
+    if favo:
+        db.session.delete(favo)
+    else:
+        favo = FavoriteTable()
+        favo.student_id = student_id
+        favo.company_id = company_id
+        db.session.add(favo)
+    db.session.commit()
+    return redirect(url_for("company_list"))

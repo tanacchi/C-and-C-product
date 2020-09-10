@@ -2,7 +2,7 @@
     <a href="" >ログアウト</a>
     <style>
         body{
-            background-color: rgb(188, 223, 182);
+            background-color: rgb(211, 247, 205);
         }
 
         table{
@@ -13,7 +13,7 @@
 </header>
 
 <body>
-    <h1>〇〇様向けTOPページ</h1>
+    <h1>{{company.name}}様向けTOPページ</h1>
     <h3>なぜ企業のニーズに答えられるのか</h3>
     <p>「企業を学生に深く知ってもらいたい」「学生は本当に自分たちのところで働きたいのかわからない」その二つに答えるサイト。
       <br>同アプリでは、企業の採用活動で抱える課題を解決するサービスを提供しています。
@@ -40,11 +40,12 @@
         <tr>
             <th>学生一覧</th>
         </tr>
+        {% for student in students %}
         <tr>
-            <!-- for文で回す感じですかね？ -->
-            <td>たかし(username)</td>
-            <td><a href="" >詳細(userinfo)</a></td>
+            <td>{{student.name}}</td>
+            <td><a href="{{url_for('student_detail', user_id=student.id)}}" >詳細</a></td>
         </tr>
+        {% endfor %}
       </table>
 
 </body>

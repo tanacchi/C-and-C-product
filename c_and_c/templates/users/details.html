@@ -1,0 +1,29 @@
+<style>
+    body{
+            background-color: rgb(211, 247, 205);
+        }
+
+    .count{
+        padding-left: 60%;
+    }
+
+</style>
+
+<body>
+<h1>{{student.name}}さんの情報</h1>
+
+<p class="count">合同説明会・オンライン講座視聴 合計回数: {{access_count}}回</p>
+
+
+<h2>経歴</h2>
+{% for history in student.history %}
+<p>
+  {{history.user_id}} : {{history.body}}
+</p>
+{% endfor %}
+
+
+<h2>解析結果</h2>
+{{student.topic}}
+
+</body>
