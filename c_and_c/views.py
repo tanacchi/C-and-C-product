@@ -171,6 +171,13 @@ def about_us():
 def enter_top():
     return render_template("users/enter_top.html")
 
+@app.route('/enterdetails/<int:user_id>')
+def student_detail(user_id):
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    histories = current_user.history
+    return render_template("users/details.html",histories=histories)
+
   
 @app.route('/students')
 def list_students():
@@ -190,5 +197,3 @@ def list_students():
             access_counts[company_name] = relation.access_count if relation else 0
         students_data[student.id] = (student.name, access_counts)
     return render_template("users/students.html", students_data=students_data)
-
-@app.route('')
