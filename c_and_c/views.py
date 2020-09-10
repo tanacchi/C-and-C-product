@@ -141,4 +141,4 @@ def list_lectures():
 
 @app.route('/about')
 def about_us():
-    return render_template("about/aboutus.html")
+    return render_template("aboutus.html")
