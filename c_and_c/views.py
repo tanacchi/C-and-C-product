@@ -2,7 +2,7 @@ from flask import render_template
 from c_and_c import app, db
 from c_and_c.models import (
     User, History, Briefing,
-    Lecture
+    Lecture, UserCompanyTable,
 )
 from c_and_c.utils import (
     session_login, is_logged_in,
@@ -14,9 +14,10 @@ from flask import (
     flash
 )
 
-
+STUDENT = 1
+COMPANY = 2
 NUMBER_USERTYPE_MAP = {
-    1: "学生", 2: "企業"
+    STUDENT: "学生", COMPANY: "企業"
 }
 
 @app.route('/')
@@ -91,10 +92,18 @@ def create_briefing():
     current_user = User.query.get(user_id)
     if current_user.name == "admin":
         if request.method == 'GET':
-            return render_template("briefing/create.html")
+            companies = User.query.filter_by(type=COMPANY)
+            return render_template("briefing/create.html", companies=companies)
         else:
             briefing = Briefing()
             briefing.description = request.form.get("description")
+            participants = request.form.get("participants")
+            for attr, value in request.form.items():
+                if 'participants' in attr:
+                    company_id = attr.split('_')[1]
+                    print(company_id, value)
+                    company = User.query.get(company_id)
+                    briefing.participants.append(company)
             db.session.add(briefing)
             db.session.commit()
             return redirect(url_for('list_briefing'))
@@ -111,7 +120,21 @@ def list_briefing():
 
 @app.route('/briefing/<int:briefing_id>')
 def briefing_detail(briefing_id):
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
     briefing = Briefing.query.get(briefing_id)
+    if current_user.type == STUDENT:
+        for company in briefing.participants:
+            relation = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company.id).first()
+            if relation:
+                relation.access_count += 1
+            else:
+                relation = UserCompanyTable()
+                relation.student_id = user_id
+                relation.company_id = company.id
+                relation.access_count = 1
+            db.session.add(relation)
+            db.session.commit()
     return render_template("briefing/show.html", briefing=briefing)
 
 
@@ -127,7 +150,6 @@ def create_lecture():
             lecture.description = request.form.get("description")
             db.session.add(lecture)
             db.session.commit()
-            lectures = Lecture.query.all()
             return redirect(url_for('list_lectures'))
 
     print("You are not admin")
@@ -139,6 +161,27 @@ def list_lectures():
     lectures = Lecture.query.all()
     return render_template("lectures/list.html", lectures=lectures)
 
+
 @app.route('/entertop')
 def enter_top():
     return render_template("users/enter_top.html")
+
+  
+@app.route('/students')
+def list_students():
+    user_id = get_current_user()
+    current_user = User.query.get(user_id)
+    if not current_user.type == COMPANY:
+        print("You are not company.")
+        return redirect(url_for('root'))
+    companies = { company.id: company.name for company in User.query.filter_by(type=COMPANY)}
+    print(companies)
+    students = User.query.filter_by(type=STUDENT)
+    students_data = {}
+    for student in students:
+        access_counts = {}
+        for company_id, company_name in companies.items():
+            relation = UserCompanyTable.query.filter_by(student_id=student.id, company_id=company_id).first()
+            access_counts[company_name] = relation.access_count if relation else 0
+        students_data[student.id] = (student.name, access_counts)
+    return render_template("users/students.html", students_data=students_data)
