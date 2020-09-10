@@ -19,10 +19,20 @@ COMPANY = 2
 NUMBER_USERTYPE_MAP = {
     STUDENT: "学生", COMPANY: "企業"
 }
+STUDENT_TOPICS = [
+    "ハッカソン", "競技プログラミング",
+]
 
 @app.route('/')
 def root():
-    return render_template('index.html')
+    user_id = get_current_user()
+    if not user_id:
+        return render_template('index.html', is_logged_in=False)
+    current_user = User.query.get(user_id)
+    if current_user.type == STUDENT:
+        return render_template('index.html', is_logged_in=True)
+    else:
+        return render_template("users/enter_top.html")
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -56,9 +66,15 @@ def login():
         user = User.query.filter_by(name=user_name).first()
         if user:
             session_login(user.id)
+            return redirect(url_for('root'))
         else:
             print("login failed.")
             return render_template('users/login.html')
+
+
+@app.route('/logout')
+def logout():
+    session_logout()
     return redirect(url_for('root'))
 
 
@@ -74,7 +90,19 @@ def create_history():
         current_user.history.append(new_history)
         db.session.add(new_history)
         db.session.commit()
-
+        histories = History.query.filter_by(user_id=user_id)
+        student_topics = []
+        for history in histories:
+            for topic in STUDENT_TOPICS:
+                if topic in history.body:
+                    student_topics.append(topic)
+        student_topics = list(set(student_topics))
+        topic_str = ""
+        for topic in student_topics:
+            topic_str += topic + ", "
+        current_user.topic = topic_str
+        db.session.add(current_user)
+        db.session.commit()
     return redirect(url_for('user_history'))
 
 
@@ -171,6 +199,7 @@ def about_us():
 def enter_top():
     return render_template("users/enter_top.html")
 
+
 @app.route('/enterdetails/<int:user_id>')
 def student_detail(user_id):
     user_id = get_current_user()
@@ -178,7 +207,7 @@ def student_detail(user_id):
     histories = current_user.history
     return render_template("users/details.html",histories=histories)
 
-  
+
 @app.route('/students')
 def list_students():
     user_id = get_current_user()
