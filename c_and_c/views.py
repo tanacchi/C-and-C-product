@@ -22,7 +22,14 @@ NUMBER_USERTYPE_MAP = {
 
 @app.route('/')
 def root():
-    return render_template('index.html')
+    user_id = get_current_user()
+    if not user_id:
+        return render_template('index.html', is_logged_in=False)
+    current_user = User.query.get(user_id)
+    if current_user.type == STUDENT:
+        return render_template('index.html', is_logged_in=True)
+    else:
+        return render_template("users/enter_top.html")
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -56,9 +63,15 @@ def login():
         user = User.query.filter_by(name=user_name).first()
         if user:
             session_login(user.id)
+            return redirect(url_for('root'))
         else:
             print("login failed.")
             return render_template('users/login.html')
+
+
+@app.route('/logout')
+def logout():
+    session_logout()
     return redirect(url_for('root'))
 
 
@@ -171,7 +184,7 @@ def about_us():
 def enter_top():
     return render_template("users/enter_top.html")
 
-  
+
 @app.route('/students')
 def list_students():
     user_id = get_current_user()
