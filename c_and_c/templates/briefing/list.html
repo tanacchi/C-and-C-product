@@ -1,4 +1,14 @@
 <h1>合同説明会一覧</h1>
+<h3>BtoB合同説明会</h3>
+<p>学生が普段見ることのないBtoB企業についての説明や
+  <br>どのような仕事なのかを知ることができます。<br><br><br></p>
+
+<h3>IT業界合同説明会</h3>
+<p>SIerとは？SEとは？ITコンサルタントって何？
+  <br>IT業界ではどのような仕事をしているのかを知ることができます。<br><br><br></p>
+
+<h3>若手座談会</h3>
+<p>様々な業界の若手が集まり普段の働き方について話してくれます。<br><br><br></p>
 <ul>
 {% for briefing in briefings %}
   <li><a href="{{ url_for('briefing_detail', briefing_id=briefing.id)}}">合同説明会 {{briefing.id}}</li>
