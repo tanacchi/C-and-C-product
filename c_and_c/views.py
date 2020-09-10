@@ -162,6 +162,11 @@ def list_lectures():
     return render_template("lectures/list.html", lectures=lectures)
 
 
+@app.route('/entertop')
+def enter_top():
+    return render_template("users/enter_top.html")
+
+  
 @app.route('/students')
 def list_students():
     user_id = get_current_user()
