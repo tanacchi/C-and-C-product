@@ -203,8 +203,10 @@ def enter_top():
 
 @app.route('/enterdetails/<int:user_id>')
 def student_detail(user_id):
+    company_id = get_current_user()
     student = User.query.get(user_id)
-    return render_template("users/details.html", student=student)
+    access_count = UserCompanyTable.query.filter_by(student_id=user_id, company_id=company_id).access_count
+    return render_template("users/details.html", student=student, access_count=access_count)
 
 
 @app.route('/students')

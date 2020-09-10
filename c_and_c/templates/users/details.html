@@ -12,9 +12,8 @@
 <body>
 <h1>{{student.name}}さんの情報</h1>
 
-<p class="count">オンライン講座視聴回数:〇回</p>
+<p class="count">合同説明会・オンライン講座視聴 合計回数: {{access_count}}回</p>
 
-<p class="count">合同説明会参加回数:〇回</p>
 
 <h2>経歴</h2>
 {% for history in student.history %}
