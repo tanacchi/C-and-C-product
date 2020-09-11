@@ -21,7 +21,11 @@ NUMBER_USERTYPE_MAP = {
     STUDENT: "学生", COMPANY: "企業"
 }
 STUDENT_TOPICS = [
-    "ハッカソン", "競技プログラミング",
+    "ハッカソン",
+    "競技プログラミング",
+    "アルバイト",
+    "留学",
+    "体育会"
 ]
 
 @app.route('/')
@@ -210,11 +214,13 @@ def company_list():
     current_user = User.query.get(user_id)
     companies = User.query.filter_by(type=COMPANY)
     company_data = {}
+    fav_count = 0
     for company in companies:
         favo = FavoriteTable.query.filter_by(student_id=user_id, company_id=company.id).first()
         favorited = True if favo else False
+        fav_count = fav_count + 1 if favorited else fav_count
         company_data[company.id] = (company.name, favorited)
-    return render_template("users/companies.html", company_data=company_data, student_id=user_id)
+    return render_template("users/companies.html", company_data=company_data, student_id=user_id, fav_count=fav_count)
 
 
 @app.route('/enterdetails/<int:user_id>')
